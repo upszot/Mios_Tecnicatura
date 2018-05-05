@@ -4,6 +4,7 @@
 
 #define CANTUSER 3 //100
 #define CANT_PROD_USUARIOS 5 //1000
+#define CANT_VENTAS 5 //1000
 
 int main()
 {
@@ -12,6 +13,9 @@ int main()
 
     eProducto_Usuario productosXusuarios[CANT_PROD_USUARIOS];
     inicializa_user_Prod(productosXusuarios,CANT_PROD_USUARIOS);
+
+    eVentas ventas[CANT_VENTAS];
+    inicializa_Ventas(ventas,CANT_VENTAS);
 
     int Error;
     char seguir='s';
@@ -60,9 +64,7 @@ int main()
                 {
                     sms_error(2,Error);
                 }
-
-    Error= eGen_baja_ProductosXUsuarios(usuarios,CANTUSER,get_int("Ingrese el ID del usuario a Eliminar"),productosXusuarios,CANT_PROD_USUARIOS);
-                //Error= eGen_baja_ProductosXUsuarios(usuarios ,CANTUSER, get_int("Ingrese el ID del usuario a Eliminar"), productosXusuarios, PROD_USUARIOS );
+                Error=eGen_baja_Usuario_productos_ventas(usuarios,CANTUSER,get_int("Ingrese el ID del usuario a Eliminar"),productosXusuarios,CANT_PROD_USUARIOS,ventas,CANT_VENTAS);
 
                 if(Error!=0)
                 {
