@@ -34,13 +34,13 @@ char *get_char(char *sms,int LongitudCadena)
         //printf("\nL:%s T:%s Dif:%d TAM:%d ultimo:[%c] Overflow:[%c] \n",TextoLibre,PTexto,strcmp(PTexto,TextoLibre),sizeof(PTexto),PTexto[LongitudCadena-1],PTexto[sizeof(PTexto)]);
         //system("pause");
 
-        //if(strlen(PTexto) >= LongitudCadena) //el strlen funciona para atras... en estos casos asique no sirve..
-        if(strcmp(PTexto,TextoLibre)<0)
+        if(strlen(PTexto) >= LongitudCadena) //el strlen funciona para atras... en estos casos asique no sirve..
+        //if(strcmp(PTexto,TextoLibre)<0)
         {//overflow
             flag=1;
-        }
-        if(flag==1)
-        {
+            //flag=0;// si lleno mucho el buffer se boludea igual....
+            fflush(stdin);
+            *PTexto=NULL;
             printf("\n Error Overflow: La longitud maxima del campo es: %d \n",LongitudCadena);
             system("pause");
             system("cls");
@@ -106,6 +106,24 @@ int get_int_con_exit(char *sms)
     }while(Numero <= 0);
     return Numero;
 }
+
+float get_float(char *sms)
+{
+    float Numero;
+    do
+    {
+        printf("%s ",sms);
+        scanf("2%f",&Numero);
+        if(Numero<=0)
+        {
+            printf("\nValor invalido, debe ser mayor que 0.. ");
+            system("pause");
+            system("cls");
+        }
+    }while(Numero <= 0);
+    return Numero;
+}
+
 
 void sms_error(int mensaje,int Error)
 {
@@ -381,6 +399,84 @@ int eGen_baja_Usuario_productos_ventas(eUsuario usuarios[] ,int cant_usuario, in
     {
         retorno = -2;
     }//FIN     if( eGen_baja_usuario(usuarios ,cant_usuario, id_user_borrar) == 0)
+    return retorno;
+}
+
+
+int eGen_buscarLugarLibre_productos(eProducto_Usuario listado[],int limite)
+{
+    int retorno = -1;
+    if(limite > 0 && listado != NULL)
+    {
+        retorno = -2;
+        for(int i=0;i<limite;i++)
+        {
+            if((listado[i].id_producto == 0) && (listado[i].id_usuario == 0))
+            {
+                retorno = i;
+                break;
+            }
+        }
+    }//FIN if(limite > 0 && listado != NULL)
+    return retorno;
+}
+
+int eGen_siguienteId_Producto(eProducto_Usuario listado[],int limite,int ID_User)
+{
+    int retorno = 0;
+    if(limite > 0 && listado != NULL)
+    {
+        for(int i=0; i<limite; i++)
+        {
+            if(listado[i].id_usuario == ID_User)
+            {
+                if(listado[i].id_producto > retorno)
+                {
+                    retorno=listado[i].id_producto;
+                }
+            }
+        }//FIN for(int i=0; i<limite; i++)
+    }
+    return retorno+1;
+}
+
+int eGen_Publicar_Producto(eUsuario usuarios[],int cant_usuarios,eProducto_Usuario prodXuser[],int Cant_ProdXuser)
+{
+    int retorno=-1;
+    int ID_User;
+    int PosID;
+    char clave[10];
+    int PosID_Prod;
+
+    ID_User=get_int("\nIngrese su ID de usuario: ");
+    PosID=eGen_buscarPorId(usuarios,cant_usuarios,ID_User);
+    if(PosID>0)
+    {//usuario existe
+        retorno=-2;
+        strcpy(clave,get_char("\n Ingrese Password: ",10));
+        if(strcmp(clave,usuarios[PosID].password) == 0)
+        {//Clave correcta
+            PosID_Prod=eGen_buscarLugarLibre_productos(prodXuser,Cant_ProdXuser);
+            if(PosID_Prod>0)
+            {
+                prodXuser[PosID_Prod].id_usuario=ID_User;
+                prodXuser[PosID_Prod].id_producto=eGen_siguienteId_Producto(prodXuser,Cant_ProdXuser,ID_User);
+                strcpy(prodXuser[PosID_Prod].nombre,get_char("\n Ingrese Nombre del Producto: ",50));
+                prodXuser[PosID_Prod].precio=get_float("\n Ingrese Precio del producto: ");
+                prodXuser[PosID_Prod].stock=get_int("\n Ingrese stock: ");
+                //prodXuser[PosID_Prod]
+            }
+            else
+            {
+                retorno = -3;
+            }//FIN if(PosID_Prod)>0)
+        }
+        else
+        {//Error de password
+            retorno=-3;
+        }//FIN if(strcmp(clave,usuarios[PosID].password) == 0)
+    }//FIN if(PosID>0)
+
     return retorno;
 }
 

@@ -23,16 +23,16 @@ int main()
 
     do
     {
-        menu("\n1. ALTA DE USUARIO"
-             "\n2. MODIFICAR DATOS DEL USUARIO"
-             "\n3. BAJA DEL USUARIO"
-             "\n4. PUBLICAR PRODUCTO"
-             "\n5. MODIFICAR PUBLICACION"
-             "\n6. CANCELAR PUBLICACION"
-             "\n7. COMPRAR PRODUCTO"
-             "\n8. LISTAR PUBLICACIONES DE USUARIO"
-             "\n9. LISTAR PUBLICACIONES"
-             "\n10. LISTAR USUARIOS"
+        menu("\n 1. ALTA DE USUARIO"                        //OK
+             "\n 2. MODIFICAR DATOS DEL USUARIO"            //OK
+             "\n 3. BAJA DEL USUARIO"                       //OK---ver las otras tablas..
+             "\n 4. PUBLICAR PRODUCTO"                      //
+             "\n 5. MODIFICAR PUBLICACION"                  //
+             "\n 6. CANCELAR PUBLICACION"                   //
+             "\n 7. COMPRAR PRODUCTO"                       //
+             "\n 8. LISTAR PUBLICACIONES DE USUARIO"        //
+             "\n 9. LISTAR PUBLICACIONES"                   //
+             "\n10. LISTAR USUARIOS"                        //OK---falta clasificacion
              );
         scanf("%d",&opcion);
         switch(opcion)
@@ -51,7 +51,7 @@ int main()
                     sms_error(2,Error);
                 }
 
-                Error=eGen_modificacion(usuarios ,CANTUSER, get_int("Ingrese el ID del usuario a modificar"));
+                Error=eGen_modificacion(usuarios ,CANTUSER, get_int("\nIngrese el ID del usuario a modificar: "));
                 if(Error!=0)
                 {
                     sms_error(3,Error);
@@ -64,13 +64,15 @@ int main()
                 {
                     sms_error(2,Error);
                 }
-                Error=eGen_baja_Usuario_productos_ventas(usuarios,CANTUSER,get_int("Ingrese el ID del usuario a Eliminar"),productosXusuarios,CANT_PROD_USUARIOS,ventas,CANT_VENTAS);
+                Error=eGen_baja_Usuario_productos_ventas(usuarios,CANTUSER,get_int("\nIngrese el ID del usuario a Eliminar: "),productosXusuarios,CANT_PROD_USUARIOS,ventas,CANT_VENTAS);
 
                 if(Error!=0)
                 {
                     sms_error(5,Error);
                 }
-
+                break;
+            case 4://PUBLICAR PRODUCTO
+                Error=eGen_Publicar_Producto(usuarios,CANTUSER,productosXusuarios,CANT_PROD_USUARIOS);
                 break;
             case 10:
                 Error= eGen_mostrarUsuarios(usuarios,CANTUSER);
@@ -78,11 +80,11 @@ int main()
                 {
                     sms_error(2,Error);
                 }
+                printf("\n");
+                system("pause");
                 break;
             case 0://salir
                 seguir = 'n';
-                break;
-            default:
                 break;
         }//FIN switch(opcion)
 
