@@ -18,7 +18,7 @@ typedef struct
 
 typedef struct
 {
-    int id_venta
+    int id_venta;
     int id_producto;
     int id_usuario_compra;
     int cantVendidos;
@@ -27,13 +27,13 @@ typedef struct
 
 #endif // ESTRUCTURAGENERICA_H_INCLUDED
 
-#----- GENERICAS ----#
+//#----- GENERICAS ----#
 void menu(char *opciones);
 char *get_char(char *sms,int LongitudCadena);
 int get_int(char *sms);
 void sms_error(int mensaje,int Error);
 
-#----- ESTRUCTURAS ---#
+//#----- ESTRUCTURAS ---#
 void inicializa_usuarios( eUsuario listado[],int limite);
 void inicializa_user_Prod(eProducto_Usuario listado[],int limite);
 void inicializa_Ventas(eVentas listado[],int limite);
@@ -53,7 +53,6 @@ int eGen_baja_usuario(eUsuario listado[] ,int limite, int id);
 int eGen_baja_ProductosXUsuarios(eUsuario usuarios[] ,int cant_usuario, int id_usuario, eProducto_Usuario prodXuser, int cant_prodXuser );
 
 
-
-#--- SIN REVIZAR ---#
+//#--- SIN REVIZAR ---#
 
 

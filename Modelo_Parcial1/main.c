@@ -3,15 +3,15 @@
 #include "lib.h"
 
 #define CANTUSER 3 //100
-#define PROD_USUARIOS 5 //1000
+#define CANT_PROD_USUARIOS 5 //1000
 
 int main()
 {
     eUsuario usuarios[CANTUSER];
     inicializa_usuarios( usuarios,CANTUSER);
 
-    eProducto_Usuario productosXusuarios[PROD_USUARIOS];
-    inicializa_user_Prod(productosXusuarios,PROD_USUARIOS);
+    eProducto_Usuario productosXusuarios[CANT_PROD_USUARIOS];
+    inicializa_user_Prod(productosXusuarios,CANT_PROD_USUARIOS);
 
     int Error;
     char seguir='s';
@@ -33,14 +33,14 @@ int main()
         scanf("%d",&opcion);
         switch(opcion)
         {
-            case 1:
+            case 1: //ALTA DE USUARIO"
                 Error = eGen_alta_usuario(usuarios,CANTUSER);
                 if(Error!=0)
                 {
                     sms_error(1,Error);
                 }
                 break;
-            case 2:
+            case 2://MODIFICAR DATOS DEL USUARIO"
                 Error= eGen_mostrarUsuarios(usuarios,CANTUSER);
                 if(Error!=0)
                 {
@@ -54,14 +54,15 @@ int main()
                 }
 
                 break;
-            case 3:
+            case 3://BAJA DEL USUARIO"
                 Error= eGen_mostrarUsuarios(usuarios,CANTUSER);
                 if(Error!=0)
                 {
                     sms_error(2,Error);
                 }
-
-                Error= eGen_baja_ProductosXUsuarios(usuarios ,CANTUSER, get_int("Ingrese el ID del usuario a Eliminar"), productosXusuarios, PROD_USUARIOS );
+                Error= get_int("Ingrese el ID del usuario a Eliminar");
+//    Error= eGen_baja_ProductosXUsuarios(usuarios,CANTUSER,Error,productosXusuarios,CANT_PROD_USUARIOS);
+                //Error= eGen_baja_ProductosXUsuarios(usuarios ,CANTUSER, get_int("Ingrese el ID del usuario a Eliminar"), productosXusuarios, PROD_USUARIOS );
 
                 if(Error!=0)
                 {
@@ -73,7 +74,7 @@ int main()
                 Error= eGen_mostrarUsuarios(usuarios,CANTUSER);
                 if(Error!=0)
                 {
-                    Printf("Se produjo un Error al mostrar Usuarios -- COD: %d",Error);
+                    sms_error(2,Error);
                 }
                 break;
             case 0://salir

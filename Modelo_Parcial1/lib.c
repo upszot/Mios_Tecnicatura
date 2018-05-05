@@ -6,7 +6,7 @@
 #define OCUPADO 1
 #define LIBRE 0
 
-#------------- Genericas -------------#
+//#------------- Genericas -------------#
 void menu(char *opciones)
 {
     system("cls");
@@ -66,27 +66,27 @@ void sms_error(int mensaje,int Error)
     switch(mensaje)
     {
         case 1:
-            Printf("Se produjo un Error en la alta de Usuarios -- COD: %d",Error);
+            printf("Se produjo un Error en la alta de Usuarios -- COD: %d",Error);
             break;
         case 2:
-            Printf("Se produjo un Error al mostrar Usuarios -- COD: %d",Error);
+            printf("Se produjo un Error al mostrar Usuarios -- COD: %d",Error);
             break;
         case 3:
-            Printf("Se produjo un Error al Modificar datos del Usuario -- COD: %d",Error);
+            printf("Se produjo un Error al Modificar datos del Usuario -- COD: %d",Error);
             break;
         case 4:
-            Printf("Se produjo un Error No se encontro el ID del Usuario -- COD: %d",Error);
+            printf("Se produjo un Error No se encontro el ID del Usuario -- COD: %d",Error);
             break;
         case 5:
-            Printf("Se produjo un Error al Eliminar un Usuario -- COD: %d",Error);
+            printf("Se produjo un Error al Eliminar un Usuario -- COD: %d",Error);
             break;
         default:
-            Printf("Se produjo un Error Inesperado...");
+            printf("Se produjo un Error Inesperado...");
             break;
     }
 }
 
-#------------- Con estructuras -------------#
+//#------------- Con estructuras -------------#
 void inicializa_usuarios( eUsuario listado[],int limite)
 {
     if(limite > 0 && listado != NULL)
@@ -175,7 +175,7 @@ int eGen_alta_usuario(eUsuario  listado[],int limite)
             listado[indice].estado= OCUPADO;
 
             strcpy(listado[indice].nombre,get_char("\n Ingrese Nombre: ",50));
-            strcpy(listado[i].password,get_char("\n Ingrese Password: ",10));
+            strcpy(listado[indice].password,get_char("\n Ingrese Password: ",10));
             retorno = 0;
         }//FIN if(indice >= 0)
     }//FIN if(limite > 0 && listado != NULL)
@@ -214,7 +214,7 @@ int eGen_buscarPorId(eUsuario listado[] ,int limite, int id)
         retorno = -2;
         for(int i=0;i<limite;i++)
         {
-            if(listado[i].estado == OCUPADO && listado[i].idGenerica == id)
+            if(listado[i].estado == OCUPADO && listado[i].id == id)
             {
                 retorno = i;
                 break;
@@ -227,21 +227,25 @@ int eGen_buscarPorId(eUsuario listado[] ,int limite, int id)
 int eGen_modificacion(eUsuario listado[] ,int limite, int id)
 {
     int retorno = -1;
-    int posmodifica;
-
-    posmodifica=eGen_buscarPorId(listado,limite,id);
+    int PosID;
 
     if(limite > 0 && listado != NULL)
     {
         retorno = -2;
-
-        if(posmodifica >= 0)
+        PosID=eGen_buscarPorId(listado,limite,id);
+        if(PosID >= 0)
         {
             retorno = 0;
-            strcpy(listado[indice].nombre,get_char("\n Ingrese Nombre: ",50));
-            strcpy(listado[i].password,get_char("\n Ingrese Password: ",10));
-            listado[posmodifica].estado = OCUPADO;
+            strcpy(listado[PosID].nombre,get_char("\n Ingrese Nombre: ",50));
+            strcpy(listado[PosID].password,get_char("\n Ingrese Password: ",10));
+            listado[PosID].estado = OCUPADO;
         }
+        else
+        {//en este caso PosID va a tener el codigo de error...
+            retorno = -3;
+            sms_error(4,PosID);
+        }
+
     }
     return retorno;
 }
@@ -257,13 +261,12 @@ int eGen_baja_usuario(eUsuario listado[] ,int limite, int id)
         listado[PosID].estado==0;
     }
     else
-    {
+    {//en este caso PosID va a tener el codigo de error...
         retorno = -2;
-        sms_error(4,Error);
+        sms_error(4,PosID);
     }
     return retorno;
 }
-
 
 int eGen_baja_ProductosXUsuarios(eUsuario usuarios[] ,int cant_usuario, int id_usuario, eProducto_Usuario prodXuser, int cant_prodXuser )
 {
@@ -277,7 +280,7 @@ int eGen_baja_ProductosXUsuarios(eUsuario usuarios[] ,int cant_usuario, int id_u
             {
                 prodXuser.id_producto=0;
             }
-        }
+        }//fin for(int i =0;i<cant_prodXuser;i++)
     }
     else
     {
@@ -286,8 +289,8 @@ int eGen_baja_ProductosXUsuarios(eUsuario usuarios[] ,int cant_usuario, int id_u
     return retorno;
 }
 
-#--------- No vistas ------#
-
+//#--------- No vistas ------#
+/*
 float get_PromedioClasificacion_usuario(int id_usuario)
 {//recorrer tabla vendidas para dicho usuario y calcular
     int SumaClasificaciones=0;
@@ -302,7 +305,7 @@ int eGen_mostrarUno_Clasificacion(eUsuario record,float Clasificacion)
 
 }
 
-int eGen_mostrarUsuarios_Clasificacion(eUsuario usuarios[] ,int cant_usuario, eProducto_Usuario prodXuser, int cant_prodXuser,eVentas Ventas_Usuario)
+int eGen_mostrarUsuarios_Clasificacion(eUsuario usuarios[] ,int cant_usuarios, eProducto_Usuario prodXuser, int cant_prodXuser,eVentas Ventas_Usuario)
 {
     int retorno = -1;
     if(cant_usuarios > 0 && usuarios != NULL)
@@ -318,3 +321,4 @@ int eGen_mostrarUsuarios_Clasificacion(eUsuario usuarios[] ,int cant_usuario, eP
     }
     return retorno;
 }
+*/
