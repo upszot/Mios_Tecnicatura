@@ -60,8 +60,8 @@ int main()
                 {
                     sms_error(2,Error);
                 }
-                Error= get_int("Ingrese el ID del usuario a Eliminar");
-//    Error= eGen_baja_ProductosXUsuarios(usuarios,CANTUSER,Error,productosXusuarios,CANT_PROD_USUARIOS);
+
+    Error= eGen_baja_ProductosXUsuarios(usuarios,CANTUSER,get_int("Ingrese el ID del usuario a Eliminar"),productosXusuarios,CANT_PROD_USUARIOS);
                 //Error= eGen_baja_ProductosXUsuarios(usuarios ,CANTUSER, get_int("Ingrese el ID del usuario a Eliminar"), productosXusuarios, PROD_USUARIOS );
 
                 if(Error!=0)

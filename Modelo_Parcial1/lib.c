@@ -268,17 +268,19 @@ int eGen_baja_usuario(eUsuario listado[] ,int limite, int id)
     return retorno;
 }
 
-int eGen_baja_ProductosXUsuarios(eUsuario usuarios[] ,int cant_usuario, int id_usuario, eProducto_Usuario prodXuser, int cant_prodXuser )
+int eGen_baja_ProductosXUsuarios(eUsuario usuarios[] ,int cant_usuario, int id_usuario, eProducto_Usuario prodXuser[], int cant_prodXuser)
 {
     int retorno = -1;
     if( eGen_baja_usuario(usuarios ,cant_usuario, id_usuario) == 0)
     {
         retorno = 0;
-        for(int i =0;i<cant_prodXuser;i++)
+        for(int i=0;i<cant_prodXuser;i++)
         {
-            if(prodXuser.id_usuario==id_usuario)
+            if(prodXuser[i].id_usuario==id_usuario)
             {
-                prodXuser.id_producto=0;
+                prodXuser[i].id_producto=0;
+                prodXuser[i].id_usuario=0;
+                prodXuser[i].stock=0;
             }
         }//fin for(int i =0;i<cant_prodXuser;i++)
     }
