@@ -23,7 +23,7 @@ typedef struct
     int id_producto;        //PK
     int id_usuario_vende;  //PK
     int cantVendidos;
-    float clasificacion;
+    int clasificacion;
 }eVentas;
 
 #endif // ESTRUCTURAGENERICA_H_INCLUDED
@@ -32,6 +32,7 @@ typedef struct
 void menu(char *opciones);
 char *get_char(char *sms,int LongitudCadena);
 int get_int(char *sms);
+int get_int_entre(char *sms,int minimo,int maximo);
 int get_int_con_exit(char *sms);
 float get_float(char *sms);
 void sms_error(int mensaje,int Error);
@@ -45,7 +46,7 @@ int eGen_buscarLugarLibre(eUsuario listado[],int limite);
 int eGen_siguienteId(eUsuario listado[],int limite);
 int eGen_alta_usuario(eUsuario  listado[],int limite);
 
-float get_PromedioClasificacion_usuario(int id_usuario);
+
 void eGen_mostrarUno(eUsuario record);
 int eGen_mostrarUsuarios(eUsuario listado[],int limite);
 
@@ -73,3 +74,10 @@ int eGen_cancelar_Publicacion(int ID_Usuario,int ID_Producto,eProducto_Usuario p
 
 int eGen_Lista_Todas_Publicaciones(eUsuario usuarios[],int cant_usuarios,eVentas ventas[],int cant_ventas,eProducto_Usuario prodXuser[],int cant_prod);
 
+int eGen_siguienteId_Venta(eVentas listado[],int limite);
+int AltaVenta(eVentas ventas[],int cant_ventas,int ID_Usuario,int ID_Producto,int Cant_Items );
+int Comprar_producto_usuario(int ID_Usuario,int ID_Producto,eVentas ventas[],int cant_ventas,eProducto_Usuario prodXuser[],int cant_prod);
+
+float get_PromedioClasificacion_usuario(int ID_Usuario,eVentas ventas[],int cant_ventas);
+void eGen_mostrarUno_Clasificacion(eUsuario record,float Clasificacion);
+int eGen_mostrarUsuarios_Clasificacion(eUsuario usuarios[] ,int cant_usuarios, eProducto_Usuario prodXuser[], int cant_prodXuser,eVentas Ventas_Usuario[],int cant_ventas);

@@ -4,7 +4,7 @@
 
 #define CANTUSER 3 //100
 #define CANT_PROD_USUARIOS 5 //1000
-#define CANT_VENTAS 5 //1000
+#define CANT_VENTAS (CANTUSER * CANT_PROD_USUARIOS)
 
 int main()
 {
@@ -23,8 +23,6 @@ int main()
     int aux; //variables temporales multiproposito
     int aux2;//variables temporales multiproposito
 
-//    system("pause");
-
     do
     {
         menu("\n 1. ALTA DE USUARIO"                        //OK
@@ -33,10 +31,10 @@ int main()
              "\n 4. PUBLICAR PRODUCTO"                      //OK
              "\n 5. MODIFICAR PUBLICACION"                  //OK
              "\n 6. CANCELAR PUBLICACION"                   //OK
-             "\n 7. COMPRAR PRODUCTO"                       //
+             "\n 7. COMPRAR PRODUCTO"                       //OK
              "\n 8. LISTAR PUBLICACIONES DE USUARIO"        //OK
              "\n 9. LISTAR PUBLICACIONES"                   //OK
-             "\n10. LISTAR USUARIOS"                        //OK---falta clasificacion
+             "\n10. LISTAR USUARIOS"                        //OK
              );
         scanf("%d",&opcion);
         switch(opcion)
@@ -116,14 +114,24 @@ int main()
                 }
                 break;
             case 7://COMPRAR PRODUCTO
-
+                aux=get_int("\nIngrese ID de usuario a consultar Publicaciones: ");
+                Error=eGen_Lista_Publicaciones_Usuario(aux,usuarios,CANTUSER,ventas,CANT_VENTAS,productosXusuarios,CANT_PROD_USUARIOS);
+                if(Error!=0)
+                {
+                    sms_error(opcion,Error);
+                }
+                printf("\n");
+                system("pause");
+                aux2=get_int("\nIngrese ID Producto a Comprar: ");
+                //
+                Error=Comprar_producto_usuario(aux,aux2,ventas,CANT_VENTAS,productosXusuarios,CANT_PROD_USUARIOS );
                 if(Error!=0)
                 {
                     sms_error(opcion,Error);
                 }
                 break;
             case 8://LISTAR PUBLICACIONES DE USUARIO
-                aux=get_int("\nIngrese su ID de usuario: ");
+                aux=get_int("\nIngrese ID de usuario a consultar Publicaciones: ");
                 Error=eGen_Lista_Publicaciones_Usuario(aux,usuarios,CANTUSER,ventas,CANT_VENTAS,productosXusuarios,CANT_PROD_USUARIOS);
                 if(Error!=0)
                 {
@@ -142,7 +150,8 @@ int main()
                 printf("\n");
                 system("pause");
             case 10:
-                Error= eGen_mostrarUsuarios(usuarios,CANTUSER);
+                //Error= eGen_mostrarUsuarios(usuarios,CANTUSER);
+                Error=eGen_mostrarUsuarios_Clasificacion(usuarios,CANTUSER,productosXusuarios,CANT_PROD_USUARIOS,ventas,CANT_VENTAS);
                 if(Error!=0)
                 {
                     sms_error(opcion,Error);

@@ -54,24 +54,31 @@ char *get_char(char *sms,int LongitudCadena)
 int get_int(char *sms)
 {
     int Numero;
-    int flag=0;
     do
     {
         fflush(stdin);
         printf("%s ",sms);
         scanf("%d",&Numero);
-        if(isdigit(Numero))
+    }while(Numero <= 0);
+    return Numero;
+}
+
+int get_int_entre(char *sms,int minimo,int maximo)
+{
+    int Numero;
+    int flag;
+    do
+    {
+        flag=0;
+        fflush(stdin);
+        printf("%s : ",sms,minimo,maximo);
+        scanf("%d",&Numero);
+        if((Numero<minimo) || (Numero>maximo))
         {
+            printf("\nEl Nro a ingresar debe ser  %d < X < %d ",minimo,maximo);
             flag=1;
         }
-        if(flag==1)
-        {
-            printf("\n No es un ID valido \n");
-            system("pause");
-            system("cls");
-        }
-        flag=0;
-    }while(Numero <= 0);
+    }while(flag==1);
     return Numero;
 }
 
@@ -645,7 +652,6 @@ int eGen_cancelar_Publicacion(int ID_Usuario,int ID_Producto,eProducto_Usuario p
 int eGen_Lista_Todas_Publicaciones(eUsuario usuarios[],int cant_usuarios,eVentas ventas[],int cant_ventas,eProducto_Usuario prodXuser[],int cant_prod)
 {
     int retorno=-1;
-    int Error;
     for(int i=0;i<cant_usuarios;i++)
     {
         if(usuarios[i].estado==OCUPADO)
@@ -665,37 +671,126 @@ int eGen_Lista_Todas_Publicaciones(eUsuario usuarios[],int cant_usuarios,eVentas
     return retorno;
 }
 
+int eGen_siguienteId_Venta(eVentas listado[],int limite)
+{
+    int retorno = 0;
+    if(limite > 0 && listado != NULL)
+    {
+        for(int i=0; i<limite; i++)
+        {
+            if(listado[i].id_venta==OCUPADO)
+            {
+                    if(listado[i].id_venta > retorno)
+                    {
+                         retorno=listado[i].id_venta;
+                    }
+            }
+        }//FIN for(int i=0; i<limite; i++)
+    }
+    return retorno+1;
+}
+
+int AltaVenta(eVentas ventas[],int cant_ventas,int ID_Usuario,int ID_Producto,int Cant_Items )
+{
+    int retorno=-1;
+    for(int i=0;i<cant_ventas;i++)
+    {
+        if(ventas[i].id_venta==0)
+        {
+            retorno =0;
+            ventas[i].id_venta=eGen_siguienteId_Venta(ventas,cant_ventas);
+            ventas[i].id_usuario_vende=ID_Usuario;
+            ventas[i].id_producto=ID_Producto;
+            ventas[i].cantVendidos=Cant_Items;
+            ventas[i].clasificacion=get_int_entre("\nPor favor califique al vendedor (1<-X->10):",0,11);
+        }
+    }
+    return retorno;
+}
+
+int Comprar_producto_usuario(int ID_Usuario,int ID_Producto,eVentas ventas[],int cant_ventas,eProducto_Usuario prodXuser[],int cant_prod)
+{
+    int retorno=-1;
+    int Cant_Comprar;
+    float costo;
+    for(int i=0;i<cant_prod;i++)
+    {
+        if( (prodXuser[i].id_usuario==ID_Usuario) && (prodXuser[i].id_producto==ID_Producto))
+        {
+            retorno=-2;
+            if(prodXuser[i].stock>0)
+            {
+                retorno=0;
+                Cant_Comprar=get_int_entre("\nIngrese cantidad a comprar ",0,prodXuser[i].stock + 1);
+                prodXuser[i].stock=prodXuser[i].stock - Cant_Comprar;
+                costo=prodXuser[i].precio*Cant_Comprar;
+                printf("\n\n El costo Total de la compra es: %.2f ",costo);
+                if(AltaVenta(ventas,cant_ventas,ID_Usuario,ID_Producto,Cant_Comprar) != 0 )
+                {//quedo la base inconsistente
+                    retorno=-4;
+                }
+            }
+            else
+            {
+                printf("\n No puede comprar este producto se acabo el stock.");
+                retorno=-3;
+            }//FIN if(prodXuser[i].stock>0)
+        }
+    }//FIN for(int i=0;i<cant_prod;i++)
+
+
+
+    return retorno;
+}
 
 //#--------- No vistas ------#
-/*
-float get_PromedioClasificacion_usuario(int id_usuario)
+
+float get_PromedioClasificacion_usuario(int ID_Usuario,eVentas ventas[],int cant_ventas)
 {//recorrer tabla vendidas para dicho usuario y calcular
     int SumaClasificaciones=0;
     int Cant_Total_Vendido=0;
-
-
+    float promedio;
+    for(int i=0;i<cant_ventas;i++)
+    {
+        if(ventas[i].id_usuario_vende == ID_Usuario)
+        {
+            SumaClasificaciones=SumaClasificaciones+ventas[i].clasificacion;
+            Cant_Total_Vendido++;
+        }
+    }
+    if(Cant_Total_Vendido==0)
+    {
+        promedio=0;
+    }
+    else
+    {
+        promedio=SumaClasificaciones/Cant_Total_Vendido;
+    }
+    return promedio;
 }
 
-int eGen_mostrarUno_Clasificacion(eUsuario record,float Clasificacion)
+void eGen_mostrarUno_Clasificacion(eUsuario record,float Clasificacion)
 {
-     printf("\n ID: %d  -- %s  -- Clasificacion: 2%f", record.id,record.nombre,Clasificacion );
+     printf("\n ID: %d  -- %s  -- Clasificacion: %.2f", record.id,record.nombre,Clasificacion );
 
 }
 
-int eGen_mostrarUsuarios_Clasificacion(eUsuario usuarios[] ,int cant_usuarios, eProducto_Usuario prodXuser, int cant_prodXuser,eVentas Ventas_Usuario)
+int eGen_mostrarUsuarios_Clasificacion(eUsuario usuarios[] ,int cant_usuarios, eProducto_Usuario prodXuser[], int cant_prodXuser,eVentas Ventas_Usuario[],int cant_ventas)
 {
     int retorno = -1;
+    float promedio;
     if(cant_usuarios > 0 && usuarios != NULL)
     {
         retorno = 0;
         for(int i=0; i<cant_usuarios; i++)
         {
-            if(usuarios[i].estado==OCUPADO)
+            if(usuarios[i].estado == OCUPADO)
             {
-                eGen_mostrarUno(usuarios[i]);
-            }
-        }
+                promedio=get_PromedioClasificacion_usuario(usuarios[i].id,Ventas_Usuario,cant_ventas);
+                eGen_mostrarUno_Clasificacion(usuarios[i],promedio);
+            }//if(usuarios[i].estado == OCUPADO)
+        }//for(int i=0; i<cant_usuarios; i++)
     }
     return retorno;
 }
-*/
+
