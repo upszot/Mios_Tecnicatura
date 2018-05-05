@@ -28,8 +28,9 @@ char *get_char(char *sms,int LongitudCadena)
         printf("%s ",sms);
         fflush(stdin);
         fgets(TextoLibre,LongitudCadena+3,stdin); //Trunco la lectura del buffer en 3 mas de mi longitud
+        fflush(stdin);
         strncpy(PTexto, TextoLibre, LongitudCadena); // Copio la cantidad de caracteres hasta 1 menos de la longitud
-        PTexto[sizeof(PTexto) -1] = '\n';        //agrego retorno de carro
+        PTexto[sizeof(PTexto) -1] = '\0';        //agrego retorno de carro
 
         //printf("\nL:%s T:%s Dif:%d TAM:%d ultimo:[%c] Overflow:[%c] \n",TextoLibre,PTexto,strcmp(PTexto,TextoLibre),sizeof(PTexto),PTexto[LongitudCadena-1],PTexto[sizeof(PTexto)]);
         //system("pause");
@@ -59,6 +60,7 @@ int get_int(char *sms)
         fflush(stdin);
         printf("%s ",sms);
         scanf("%d",&Numero);
+        fflush(stdin);
     }while(Numero <= 0);
     return Numero;
 }
@@ -66,17 +68,21 @@ int get_int(char *sms)
 int get_int_entre(char *sms,int minimo,int maximo)
 {
     int Numero;
-    int flag;
+    int flag=0;
     do
     {
-        flag=0;
         fflush(stdin);
         printf("%s : ",sms,minimo,maximo);
         scanf("%d",&Numero);
+        fflush(stdin);
         if((Numero<minimo) || (Numero>maximo))
         {
             printf("\nEl Nro a ingresar debe ser  %d < X < %d ",minimo,maximo);
             flag=1;
+        }
+        else
+        {
+            flag=0;
         }
     }while(flag==1);
     return Numero;
@@ -702,7 +708,7 @@ int AltaVenta(eVentas ventas[],int cant_ventas,int ID_Usuario,int ID_Producto,in
             ventas[i].id_usuario_vende=ID_Usuario;
             ventas[i].id_producto=ID_Producto;
             ventas[i].cantVendidos=Cant_Items;
-            ventas[i].clasificacion=get_int_entre("\nPor favor califique al vendedor (1<-X->10):",0,11);
+            ventas[i].clasificacion=get_int_entre("\nPor favor califique al vendedor (1< X >10):",0,11);
         }
     }
     return retorno;

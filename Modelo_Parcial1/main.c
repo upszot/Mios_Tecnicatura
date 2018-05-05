@@ -114,6 +114,11 @@ int main()
                 }
                 break;
             case 7://COMPRAR PRODUCTO
+                Error= eGen_mostrarUsuarios(usuarios,CANTUSER);
+                if(Error!=0)
+                {
+                    sms_error(10,Error);
+                }
                 aux=get_int("\nIngrese ID de usuario a consultar Publicaciones: ");
                 Error=eGen_Lista_Publicaciones_Usuario(aux,usuarios,CANTUSER,ventas,CANT_VENTAS,productosXusuarios,CANT_PROD_USUARIOS);
                 if(Error!=0)
