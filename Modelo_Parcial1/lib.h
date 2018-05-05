@@ -58,6 +58,7 @@ int eGen_baja_Ventas_de_Usuario(int id_usuario,eVentas ventas_user[],int cant_ve
 int eGen_baja_Usuario_productos_ventas(eUsuario usuarios[] ,int cant_usuario, int id_user_borrar, eProducto_Usuario prodXuser[], int cant_prodXuser,eVentas Ventas_User[],int cant_ventas_user);
 
 
+int valida_password(char *validar,char *password);
 int eGen_buscarLugarLibre_productos(eProducto_Usuario listado[],int limite);
 int eGen_siguienteId_Producto(eProducto_Usuario listado[],int limite,int ID_User);
 int eGen_Publicar_Producto(eUsuario usuarios[],int cant_usuarios,eProducto_Usuario prodXuser[],int Cant_ProdXuser);

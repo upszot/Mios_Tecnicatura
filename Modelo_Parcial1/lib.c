@@ -57,6 +57,7 @@ int get_int(char *sms)
     int flag=0;
     do
     {
+        fflush(stdin);
         printf("%s ",sms);
         scanf("%d",&Numero);
         if(isdigit(Numero))
@@ -113,7 +114,7 @@ float get_float(char *sms)
     do
     {
         printf("%s ",sms);
-        scanf("2%f",&Numero);
+        scanf("%f",&Numero);
         if(Numero<=0)
         {
             printf("\nValor invalido, debe ser mayor que 0.. ");
@@ -127,27 +128,48 @@ float get_float(char *sms)
 
 void sms_error(int mensaje,int Error)
 {
+    printf("\n\n");
     switch(mensaje)
     {
         case 1:
-            printf("Se produjo un Error en la alta de Usuarios -- COD: %d",Error);
+            printf("ERROR-COD: %d -- ALTA DE USUARIO",Error);
             break;
         case 2:
-            printf("Se produjo un Error al mostrar Usuarios -- COD: %d",Error);
+            printf("ERROR-COD: %d -- MODIFICAR DATOS DEL USUARIO",Error);
             break;
         case 3:
-            printf("Se produjo un Error al Modificar datos del Usuario -- COD: %d",Error);
+            printf("ERROR-COD: %d -- BAJA DEL USUARIO ",Error);
             break;
         case 4:
-            printf("Se produjo un Error No se encontro el ID del Usuario -- COD: %d",Error);
+            printf("ERROR-COD: %d -- PUBLICAR PRODUCTO",Error);
             break;
         case 5:
-            printf("Se produjo un Error al Eliminar un Usuario -- COD: %d",Error);
+            printf("ERROR-COD: %d -- MODIFICAR PUBLICACION",Error);
+            break;
+        case 6:
+            printf("ERROR-COD: %d -- CANCELAR PUBLICACION",Error);
+            break;
+        case 7:
+            printf("ERROR-COD: %d -- COMPRAR PRODUCTO",Error);
+            break;
+        case 8:
+            printf("ERROR-COD: %d -- LISTAR PUBLICACIONES DE USUARIO",Error);
+            break;
+        case 9:
+            printf("ERROR-COD: %d -- LISTAR PUBLICACIONES",Error);
+            break;
+        case 10:
+            printf("ERROR-COD: %d -- LISTAR USUARIOS",Error);
+            break;
+        case 99:
+            printf("ERROR-COD: %d -- No Encontro ID del Usuario ",Error);
             break;
         default:
             printf("Se produjo un Error Inesperado...");
             break;
     }
+    printf("\n\n");
+    system("pause");
 }
 
 //#------------- Con estructuras -------------#
@@ -317,7 +339,7 @@ int eGen_modificacion(eUsuario listado[] ,int limite, int id)
         else
         {//en este caso PosID va a tener el codigo de error...
             retorno = -3;
-            sms_error(4,PosID);
+            sms_error(99,PosID);
         }
 
     }
@@ -337,7 +359,7 @@ int eGen_baja_usuario(eUsuario listado[] ,int limite, int id)
     else
     {//en este caso PosID va a tener el codigo de error...
         retorno = -2;
-        sms_error(4,PosID);
+        sms_error(99,PosID);
     }
     return retorno;
 }
@@ -439,6 +461,25 @@ int eGen_siguienteId_Producto(eProducto_Usuario listado[],int limite,int ID_User
     }
     return retorno+1;
 }
+int valida_password(char *validar,char *password)
+{
+    int retorno=-10;
+    int aux;
+    if(validar!=NULL && password!=NULL)
+    {
+        retorno=-100;
+        aux=strcmp(validar,password);
+        if(aux == 0)
+        {
+            retorno=aux;
+        }
+        else
+        {
+            retorno=retorno+aux;
+        }//FIN if(aux == 0)
+    }//FIN if(validar!=NULL && password!=NULL)
+    return retorno;
+}
 
 int eGen_Publicar_Producto(eUsuario usuarios[],int cant_usuarios,eProducto_Usuario prodXuser[],int Cant_ProdXuser)
 {
@@ -447,36 +488,41 @@ int eGen_Publicar_Producto(eUsuario usuarios[],int cant_usuarios,eProducto_Usuar
     int PosID;
     char clave[10];
     int PosID_Prod;
+    if(cant_usuarios > 0 && usuarios != NULL && Cant_ProdXuser >0 && prodXuser !=NULL)
+    {
+        retorno = -2;
 
-    ID_User=get_int("\nIngrese su ID de usuario: ");
-    PosID=eGen_buscarPorId(usuarios,cant_usuarios,ID_User);
-    if(PosID>0)
-    {//usuario existe
-        retorno=-2;
-        strcpy(clave,get_char("\n Ingrese Password: ",10));
-        if(strcmp(clave,usuarios[PosID].password) == 0)
-        {//Clave correcta
-            PosID_Prod=eGen_buscarLugarLibre_productos(prodXuser,Cant_ProdXuser);
-            if(PosID_Prod>0)
-            {
-                prodXuser[PosID_Prod].id_usuario=ID_User;
-                prodXuser[PosID_Prod].id_producto=eGen_siguienteId_Producto(prodXuser,Cant_ProdXuser,ID_User);
-                strcpy(prodXuser[PosID_Prod].nombre,get_char("\n Ingrese Nombre del Producto: ",50));
-                prodXuser[PosID_Prod].precio=get_float("\n Ingrese Precio del producto: ");
-                prodXuser[PosID_Prod].stock=get_int("\n Ingrese stock: ");
-                //prodXuser[PosID_Prod]
+        ID_User=get_int("\nIngrese su ID de usuario: ");
+        PosID=eGen_buscarPorId(usuarios,cant_usuarios,ID_User);
+        if(PosID>=0)
+        {//usuario existe
+            retorno=-3;
+            strcpy(clave,get_char("\n Ingrese Password: ",10));
+            if(valida_password(clave,usuarios[PosID].password) == 0)
+            {//Clave correcta
+                retorno=-4;
+                PosID_Prod=eGen_buscarLugarLibre_productos(prodXuser,Cant_ProdXuser);
+                if(PosID_Prod>=0)
+                {
+                    retorno=0;
+                    prodXuser[PosID_Prod].id_usuario=ID_User;
+                    prodXuser[PosID_Prod].id_producto=eGen_siguienteId_Producto(prodXuser,Cant_ProdXuser,ID_User);
+                    strcpy(prodXuser[PosID_Prod].nombre,get_char("\n Ingrese Nombre del Producto: ",50));
+                    prodXuser[PosID_Prod].precio=get_float("\n Ingrese Precio del producto: ");
+                    prodXuser[PosID_Prod].stock=get_int("\n Ingrese stock: ");
+                    //prodXuser[PosID_Prod]
+                }
+                else
+                {
+                    retorno = -5;
+                }//FIN if(PosID_Prod)>0)
             }
             else
-            {
-                retorno = -3;
-            }//FIN if(PosID_Prod)>0)
-        }
-        else
-        {//Error de password
-            retorno=-3;
-        }//FIN if(strcmp(clave,usuarios[PosID].password) == 0)
-    }//FIN if(PosID>0)
-
+            {//Error de password
+                retorno=-6;
+            }//FIN if(strcmp(clave,usuarios[PosID].password) == 0)
+        }//FIN if(PosID>0)
+    }//if(cant_usuarios > 0 && usuarios != NULL && Cant_ProdXuser >0 && prodXuser !=NULL)
     return retorno;
 }
 
@@ -508,12 +554,12 @@ int eGen_Lista_Publicaciones_Usuario(int ID_User,eUsuario usuarios[],int cant_us
     int aux;
     int PosID;
     PosID=eGen_buscarPorId(usuarios,cant_user,ID_User);
-    if(PosID>0)
+    if(PosID>=0)
     {//usuario existe
-        retorno =-2;
+        retorno =0;
         system("cls");
         printf("\n ID: %d - Nombre: %s",usuarios[PosID].id,usuarios[PosID].nombre);
-        printf("---------------------------------");
+        printf("\n---------- Productos en Venta -----------------------\n");
         for(int i=0;i<cant_prod;i++)
         {//recorro los productos
             if(prodXuser[i].id_usuario==usuarios[PosID].id)
@@ -521,7 +567,7 @@ int eGen_Lista_Publicaciones_Usuario(int ID_User,eUsuario usuarios[],int cant_us
                 //id, nombre, precio, cantidad vendida y stock.
                 printf("\nID Producto: %d ",prodXuser[i].id_producto);
                 printf("\nNombre: %s ",prodXuser[i].nombre);
-                printf("\nPrecio: 2%f ",prodXuser[i].precio);
+                printf("\nPrecio: %.2f ",prodXuser[i].precio);
                 printf("\nStok: %d ",prodXuser[i].stock);
 
                 aux=get_cantVendidos_Producto(ID_User,prodXuser[i].id_producto,ventas,cant_ventas);

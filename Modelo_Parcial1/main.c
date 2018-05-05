@@ -22,6 +22,8 @@ int main()
     int opcion;
     int aux;
 
+//    system("pause");
+
     do
     {
         menu("\n 1. ALTA DE USUARIO"                        //OK
@@ -31,7 +33,7 @@ int main()
              "\n 5. MODIFICAR PUBLICACION"                  //
              "\n 6. CANCELAR PUBLICACION"                   //
              "\n 7. COMPRAR PRODUCTO"                       //
-             "\n 8. LISTAR PUBLICACIONES DE USUARIO"        //
+             "\n 8. LISTAR PUBLICACIONES DE USUARIO"        //OK
              "\n 9. LISTAR PUBLICACIONES"                   //
              "\n10. LISTAR USUARIOS"                        //OK---falta clasificacion
              );
@@ -42,49 +44,57 @@ int main()
                 Error = eGen_alta_usuario(usuarios,CANTUSER);
                 if(Error!=0)
                 {
-                    sms_error(1,Error);
+                    sms_error(opcion,Error);
                 }
                 break;
             case 2://MODIFICAR DATOS DEL USUARIO"
                 Error= eGen_mostrarUsuarios(usuarios,CANTUSER);
                 if(Error!=0)
                 {
-                    sms_error(2,Error);
+                    sms_error(10,Error);
                 }
 
                 Error=eGen_modificacion(usuarios ,CANTUSER, get_int("\nIngrese el ID del usuario a modificar: "));
                 if(Error!=0)
                 {
-                    sms_error(3,Error);
+                    sms_error(opcion,Error);
                 }
-
                 break;
             case 3://BAJA DEL USUARIO"
                 Error= eGen_mostrarUsuarios(usuarios,CANTUSER);
                 if(Error!=0)
                 {
-                    sms_error(2,Error);
+                    sms_error(10,Error);
                 }
                 Error=eGen_baja_Usuario_productos_ventas(usuarios,CANTUSER,get_int("\nIngrese el ID del usuario a Eliminar: "),productosXusuarios,CANT_PROD_USUARIOS,ventas,CANT_VENTAS);
 
                 if(Error!=0)
                 {
-                    sms_error(5,Error);
+                    sms_error(opcion,Error);
                 }
                 break;
             case 4://PUBLICAR PRODUCTO
                 Error=eGen_Publicar_Producto(usuarios,CANTUSER,productosXusuarios,CANT_PROD_USUARIOS);
+                if(Error!=0)
+                {
+                    sms_error(opcion,Error);
+                }
                 break;
             case 8://LISTAR PUBLICACIONES DE USUARIO
-
                 aux=get_int("\nIngrese su ID de usuario: ");
                 Error=eGen_Lista_Publicaciones_Usuario(aux,usuarios,CANTUSER,ventas,CANT_VENTAS,productosXusuarios,CANT_PROD_USUARIOS);
+                if(Error!=0)
+                {
+                    sms_error(opcion,Error);
+                }
+                printf("\n");
+                system("pause");
                 break;
             case 10:
                 Error= eGen_mostrarUsuarios(usuarios,CANTUSER);
                 if(Error!=0)
                 {
-                    sms_error(2,Error);
+                    sms_error(opcion,Error);
                 }
                 printf("\n");
                 system("pause");
