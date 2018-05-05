@@ -20,7 +20,8 @@ int main()
     int Error;
     char seguir='s';
     int opcion;
-    int aux;
+    int aux; //variables temporales multiproposito
+    int aux2;//variables temporales multiproposito
 
 //    system("pause");
 
@@ -28,13 +29,13 @@ int main()
     {
         menu("\n 1. ALTA DE USUARIO"                        //OK
              "\n 2. MODIFICAR DATOS DEL USUARIO"            //OK
-             "\n 3. BAJA DEL USUARIO"                       //OK---ver las otras tablas..
-             "\n 4. PUBLICAR PRODUCTO"                      //
-             "\n 5. MODIFICAR PUBLICACION"                  //
-             "\n 6. CANCELAR PUBLICACION"                   //
+             "\n 3. BAJA DEL USUARIO"                       //OK
+             "\n 4. PUBLICAR PRODUCTO"                      //OK
+             "\n 5. MODIFICAR PUBLICACION"                  //OK
+             "\n 6. CANCELAR PUBLICACION"                   //OK
              "\n 7. COMPRAR PRODUCTO"                       //
              "\n 8. LISTAR PUBLICACIONES DE USUARIO"        //OK
-             "\n 9. LISTAR PUBLICACIONES"                   //
+             "\n 9. LISTAR PUBLICACIONES"                   //OK
              "\n10. LISTAR USUARIOS"                        //OK---falta clasificacion
              );
         scanf("%d",&opcion);
@@ -80,6 +81,47 @@ int main()
                     sms_error(opcion,Error);
                 }
                 break;
+            case 5://MODIFICAR PUBLICACION
+                aux=get_int("\nIngrese su ID de usuario: ");
+                Error=eGen_Lista_Publicaciones_Usuario(aux,usuarios,CANTUSER,ventas,CANT_VENTAS,productosXusuarios,CANT_PROD_USUARIOS);
+                if(Error!=0)
+                {
+                    sms_error(8,Error);
+                }
+                printf("\n");
+                system("pause");
+
+                aux2=get_int("\nIngrese su ID Producto a modificar: ");
+                Error=eGen_modificar_Publicacion(aux,aux2,productosXusuarios,CANT_PROD_USUARIOS,usuarios,CANTUSER);
+                if(Error!=0)
+                {
+                    sms_error(opcion,Error);
+                }
+                break;
+            case 6://CANCELAR PUBLICACION
+                aux=get_int("\nIngrese su ID de usuario: ");
+                Error=eGen_Lista_Publicaciones_Usuario(aux,usuarios,CANTUSER,ventas,CANT_VENTAS,productosXusuarios,CANT_PROD_USUARIOS);
+                if(Error!=0)
+                {
+                    sms_error(8,Error);
+                }
+                printf("\n");
+                system("pause");
+
+                aux2=get_int("\nIngrese ID Producto a Cancelar Publicacion: ");
+                Error=eGen_cancelar_Publicacion(aux,aux2,productosXusuarios,CANT_PROD_USUARIOS,usuarios,CANTUSER);
+                if(Error!=0)
+                {
+                    sms_error(opcion,Error);
+                }
+                break;
+            case 7://COMPRAR PRODUCTO
+
+                if(Error!=0)
+                {
+                    sms_error(opcion,Error);
+                }
+                break;
             case 8://LISTAR PUBLICACIONES DE USUARIO
                 aux=get_int("\nIngrese su ID de usuario: ");
                 Error=eGen_Lista_Publicaciones_Usuario(aux,usuarios,CANTUSER,ventas,CANT_VENTAS,productosXusuarios,CANT_PROD_USUARIOS);
@@ -90,6 +132,15 @@ int main()
                 printf("\n");
                 system("pause");
                 break;
+            case 9://LISTAR PUBLICACIONES
+                Error=eGen_Lista_Todas_Publicaciones(usuarios,CANTUSER,ventas,CANT_VENTAS,productosXusuarios,CANT_PROD_USUARIOS);
+                if(Error!=0)
+                {
+                    sms_error(opcion,Error);
+                }
+                break;
+                printf("\n");
+                system("pause");
             case 10:
                 Error= eGen_mostrarUsuarios(usuarios,CANTUSER);
                 if(Error!=0)

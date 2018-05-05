@@ -40,7 +40,7 @@ char *get_char(char *sms,int LongitudCadena)
             flag=1;
             //flag=0;// si lleno mucho el buffer se boludea igual....
             fflush(stdin);
-            *PTexto=NULL;
+            *PTexto=' ';
             printf("\n Error Overflow: La longitud maxima del campo es: %d \n",LongitudCadena);
             system("pause");
             system("cls");
@@ -80,20 +80,21 @@ int get_int_con_exit(char *sms)
     int Numero;
     int flag=0;
 
-    int buffer[11];
-    int aux[10];
+    char buffer[11];
+    char aux[10];
 
     fflush(stdin);
     fgets(buffer,11,stdin);
     strcpy(aux,buffer);
-    if(isalnum(aux)==0)
+    Numero=atoi(aux);
+    if(isalnum(Numero)==0)
     {
-        if(isalpha(aux)!=0)
+        if(isalpha(Numero)!=0)
         {//es numero
-            Numero=atoi(aux);
+            flag=1;
         }
     }
-
+    printf("\nFlag=1 es numero... Valor flag: %d\n",flag);
 
 
     system("pause");
@@ -584,6 +585,83 @@ int eGen_Lista_Publicaciones_Usuario(int ID_User,eUsuario usuarios[],int cant_us
         }//for(int i=0;i<cant_prod;i++)
         printf("\n");
     }
+    return retorno;
+}
+
+int eGen_modificar_Publicacion(int ID_Usuario,int ID_Producto,eProducto_Usuario prodXuser[],int cant_prod ,eUsuario usuarios[],int cant_usuarios)
+{
+    int retorno=-1;
+    char clave[10]={""};
+    int PosID;
+    PosID=eGen_buscarPorId(usuarios,cant_usuarios,ID_Usuario);
+    if(PosID>=0)
+    {
+        retorno=-2;
+        strcpy(clave,get_char("\n Ingrese Password: ",10));
+        if(valida_password(clave,usuarios[PosID].password) == 0)
+        {
+            retorno=-3;
+            for(int i=0;i<cant_prod;i++)
+            {
+                if( (prodXuser[i].id_usuario==ID_Usuario) && (prodXuser[i].id_producto==ID_Producto))
+                {
+                    retorno=0;
+                    prodXuser[i].precio=get_float("\n Ingrese Precio del producto: ");
+                    prodXuser[i].stock=get_int("\n Ingrese stock: ");
+                }
+            }//FIN for(int i=0;i<cant_prod;i++)
+        }//FIN if(valida_password(clave,usuarios[PosID].password) == 0)
+    }//FIN if(PosID>=0)
+    return retorno;
+}
+
+int eGen_cancelar_Publicacion(int ID_Usuario,int ID_Producto,eProducto_Usuario prodXuser[],int cant_prod ,eUsuario usuarios[],int cant_usuarios)
+{
+    int retorno=-1;
+    char clave[10]={""};
+    int PosID;
+    PosID=eGen_buscarPorId(usuarios,cant_usuarios,ID_Usuario);
+    if(PosID>=0)
+    {
+        retorno=-2;
+        strcpy(clave,get_char("\n Ingrese Password: ",10));
+        if(valida_password(clave,usuarios[PosID].password) == 0)
+        {
+            retorno=-3;
+            for(int i=0;i<cant_prod;i++)
+            {
+                if( (prodXuser[i].id_usuario==ID_Usuario) && (prodXuser[i].id_producto==ID_Producto))
+                {
+                    retorno=0;
+                    prodXuser[i].id_producto=0;
+                    prodXuser[i].id_usuario=0;
+                }
+            }//FIN for(int i=0;i<cant_prod;i++)
+        }//FIN if(valida_password(clave,usuarios[PosID].password) == 0)
+    }//FIN if(PosID>=0)
+    return retorno;
+}
+
+int eGen_Lista_Todas_Publicaciones(eUsuario usuarios[],int cant_usuarios,eVentas ventas[],int cant_ventas,eProducto_Usuario prodXuser[],int cant_prod)
+{
+    int retorno=-1;
+    int Error;
+    for(int i=0;i<cant_usuarios;i++)
+    {
+        if(usuarios[i].estado==OCUPADO)
+        {
+                retorno=-2;
+                if(eGen_Lista_Publicaciones_Usuario(usuarios[i].id,usuarios,cant_usuarios,ventas,cant_ventas,prodXuser,cant_prod)==0 )
+                {
+                    retorno=0;
+                }
+                else
+                {
+                    retorno=-3;
+                }//FIN if(eGen_Lista_Publicaciones_Usuario(usuarios[i].id,usuarios,cant_usuarios,ventas,cant_ventas,prodXuser,cant_prod)==0 )
+        system("pause");
+        }//FIN if(usuarios[i].estado==OCUPADO)
+    }//FIN for(int i=0;i<cant_usuarios;i++)
     return retorno;
 }
 

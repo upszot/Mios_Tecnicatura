@@ -67,6 +67,9 @@ int eGen_Publicar_Producto(eUsuario usuarios[],int cant_usuarios,eProducto_Usuar
 int get_cantVendidos_Producto(int ID_User, int ID_Prod,eVentas listado[],int limite);
 int eGen_Lista_Publicaciones_Usuario(int ID_User,eUsuario usuarios[],int cant_user,eVentas ventas[],int cant_ventas,eProducto_Usuario prodXuser[],int cant_prod);
 
-//#--- SIN REVIZAR ---#
+int eGen_modificar_Publicacion(int ID_Usuario,int ID_Producto,eProducto_Usuario prodXuser[],int cant_prod ,eUsuario usuarios[],int cant_usuarios);
 
+int eGen_cancelar_Publicacion(int ID_Usuario,int ID_Producto,eProducto_Usuario prodXuser[],int cant_prod ,eUsuario usuarios[],int cant_usuarios);
+
+int eGen_Lista_Todas_Publicaciones(eUsuario usuarios[],int cant_usuarios,eVentas ventas[],int cant_ventas,eProducto_Usuario prodXuser[],int cant_prod);
 
