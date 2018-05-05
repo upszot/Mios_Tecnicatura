@@ -480,6 +480,68 @@ int eGen_Publicar_Producto(eUsuario usuarios[],int cant_usuarios,eProducto_Usuar
     return retorno;
 }
 
+int get_cantVendidos_Producto(int ID_User, int ID_Prod,eVentas listado[],int limite)
+{
+    int retorno = -1;
+    int contador=0;
+    if(limite > 0 && listado != NULL)
+    {
+        retorno =-2;
+        for(int i=0;i<limite;i++)
+        {
+            if( (listado[i].id_usuario_vende==ID_User) && ( listado[i].id_producto==ID_Prod)  )
+            {
+                contador++;
+            }
+        }//for(int i=0;i<limite;i++)
+    }
+    if(retorno==-2)
+    {
+        retorno=contador;
+    }
+    return retorno;
+}
+
+int eGen_Lista_Publicaciones_Usuario(int ID_User,eUsuario usuarios[],int cant_user,eVentas ventas[],int cant_ventas,eProducto_Usuario prodXuser[],int cant_prod)
+{
+    int retorno =-1;
+    int aux;
+    int PosID;
+    PosID=eGen_buscarPorId(usuarios,cant_user,ID_User);
+    if(PosID>0)
+    {//usuario existe
+        retorno =-2;
+        system("cls");
+        printf("\n ID: %d - Nombre: %s",usuarios[PosID].id,usuarios[PosID].nombre);
+        printf("---------------------------------");
+        for(int i=0;i<cant_prod;i++)
+        {//recorro los productos
+            if(prodXuser[i].id_usuario==usuarios[PosID].id)
+            {//propuctos de este usuario
+                //id, nombre, precio, cantidad vendida y stock.
+                printf("\nID Producto: %d ",prodXuser[i].id_producto);
+                printf("\nNombre: %s ",prodXuser[i].nombre);
+                printf("\nPrecio: 2%f ",prodXuser[i].precio);
+                printf("\nStok: %d ",prodXuser[i].stock);
+
+                aux=get_cantVendidos_Producto(ID_User,prodXuser[i].id_producto,ventas,cant_ventas);
+                if(aux>=0)
+                {
+                    printf("\nCantidad Vendida: %d ",aux);
+                }
+                else
+                {
+                    retorno =-3;
+                }
+                printf("\n");
+            }//if(prodXuser[i].id_usuario==usuarios[PosID].id)
+        }//for(int i=0;i<cant_prod;i++)
+        printf("\n");
+    }
+    return retorno;
+}
+
+
 //#--------- No vistas ------#
 /*
 float get_PromedioClasificacion_usuario(int id_usuario)

@@ -20,6 +20,7 @@ int main()
     int Error;
     char seguir='s';
     int opcion;
+    int aux;
 
     do
     {
@@ -73,6 +74,11 @@ int main()
                 break;
             case 4://PUBLICAR PRODUCTO
                 Error=eGen_Publicar_Producto(usuarios,CANTUSER,productosXusuarios,CANT_PROD_USUARIOS);
+                break;
+            case 8://LISTAR PUBLICACIONES DE USUARIO
+
+                aux=get_int("\nIngrese su ID de usuario: ");
+                Error=eGen_Lista_Publicaciones_Usuario(aux,usuarios,CANTUSER,ventas,CANT_VENTAS,productosXusuarios,CANT_PROD_USUARIOS);
                 break;
             case 10:
                 Error= eGen_mostrarUsuarios(usuarios,CANTUSER);

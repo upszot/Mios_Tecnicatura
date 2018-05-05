@@ -60,8 +60,11 @@ int eGen_baja_Usuario_productos_ventas(eUsuario usuarios[] ,int cant_usuario, in
 
 int eGen_buscarLugarLibre_productos(eProducto_Usuario listado[],int limite);
 int eGen_siguienteId_Producto(eProducto_Usuario listado[],int limite,int ID_User);
-
 int eGen_Publicar_Producto(eUsuario usuarios[],int cant_usuarios,eProducto_Usuario prodXuser[],int Cant_ProdXuser);
+
+
+int get_cantVendidos_Producto(int ID_User, int ID_Prod,eVentas listado[],int limite);
+int eGen_Lista_Publicaciones_Usuario(int ID_User,eUsuario usuarios[],int cant_user,eVentas ventas[],int cant_ventas,eProducto_Usuario prodXuser[],int cant_prod);
 
 //#--- SIN REVIZAR ---#
 
