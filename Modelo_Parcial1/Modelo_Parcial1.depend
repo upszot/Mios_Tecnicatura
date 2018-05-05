@@ -1,13 +1,14 @@
 # depslib dependency file v1.0
-1525492917 source:e:\documentos\tecnicatura\programacion\mios_tecnicatura\modelo_parcial1\lib.c
+1525511199 source:e:\documentos\tecnicatura\programacion\mios_tecnicatura\modelo_parcial1\lib.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	<ctype.h>
 	"lib.h"
 
-1525496905 e:\documentos\tecnicatura\programacion\mios_tecnicatura\modelo_parcial1\lib.h
+1525499569 e:\documentos\tecnicatura\programacion\mios_tecnicatura\modelo_parcial1\lib.h
 
-1525496199 source:e:\documentos\tecnicatura\programacion\mios_tecnicatura\modelo_parcial1\main.c
+1525506549 source:e:\documentos\tecnicatura\programacion\mios_tecnicatura\modelo_parcial1\main.c
 	<stdio.h>
 	<stdlib.h>
 	"lib.h"

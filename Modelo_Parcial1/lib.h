@@ -31,6 +31,7 @@ typedef struct
 void menu(char *opciones);
 char *get_char(char *sms,int LongitudCadena);
 int get_int(char *sms);
+int get_int_con_exit(char *sms);
 void sms_error(int mensaje,int Error);
 
 //#----- ESTRUCTURAS ---#
@@ -52,7 +53,6 @@ int eGen_modificacion(eUsuario listado[] ,int limite, int id);
 int eGen_baja_usuario(eUsuario listado[] ,int limite, int id);
 int eGen_baja_Productos_de_Usuario(int id_usuario,eProducto_Usuario prodXuser[], int cant_prodXuser);
 int eGen_baja_Ventas_de_Usuario(int id_usuario,eVentas ventas_user[],int cant_ventas_user);
-
 int eGen_baja_Usuario_productos_ventas(eUsuario usuarios[] ,int cant_usuario, int id_user_borrar, eProducto_Usuario prodXuser[], int cant_prodXuser,eVentas Ventas_User[],int cant_ventas_user);
 
 //#--- SIN REVIZAR ---#

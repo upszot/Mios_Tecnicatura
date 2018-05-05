@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "lib.h"
 
 #define OCUPADO 1
@@ -19,22 +20,34 @@ char *get_char(char *sms,int LongitudCadena)
 {
     char *PTexto= (char *) malloc (sizeof(char)*LongitudCadena);
     char *TextoLibre=(char *) malloc (sizeof(char)*LongitudCadena+4);
-    fflush(stdin);
-    int flag=0;
+
+    int flag;
     do
     {
+        flag=0;
         printf("%s ",sms);
-        fgets(TextoLibre,LongitudCadena+3,stdin);
+        fflush(stdin);
+        fgets(TextoLibre,LongitudCadena+3,stdin); //Trunco la lectura del buffer en 3 mas de mi longitud
+        strncpy(PTexto, TextoLibre, LongitudCadena); // Copio la cantidad de caracteres hasta 1 menos de la longitud
+        PTexto[sizeof(PTexto) -1] = '\n';        //agrego retorno de carro
+
+        //printf("\nL:%s T:%s Dif:%d TAM:%d ultimo:[%c] Overflow:[%c] \n",TextoLibre,PTexto,strcmp(PTexto,TextoLibre),sizeof(PTexto),PTexto[LongitudCadena-1],PTexto[sizeof(PTexto)]);
+        //system("pause");
+
+        //if(strlen(PTexto) >= LongitudCadena) //el strlen funciona para atras... en estos casos asique no sirve..
+        if(strcmp(PTexto,TextoLibre)<0)
+        {//overflow
+            flag=1;
+        }
         if(flag==1)
         {
-            printf("\n La longitud maxima del campo es: %d \n",LongitudCadena);
+            printf("\n Error Overflow: La longitud maxima del campo es: %d \n",LongitudCadena);
             system("pause");
             system("cls");
         }
-        flag=1;
-    }while(strlen(TextoLibre) >= LongitudCadena);
+    }while(flag!=0);
 
-    strcpy(PTexto,TextoLibre);
+    strcpy(PTexto,strtok(TextoLibre, "\n"));
     return PTexto;
 }
 
@@ -46,7 +59,7 @@ int get_int(char *sms)
     {
         printf("%s ",sms);
         scanf("%d",&Numero);
-        if(Numero<=0)
+        if(isdigit(Numero))
         {
             flag=1;
         }
@@ -57,6 +70,39 @@ int get_int(char *sms)
             system("cls");
         }
         flag=0;
+    }while(Numero <= 0);
+    return Numero;
+}
+
+int get_int_con_exit(char *sms)
+{
+    int Numero;
+    int flag=0;
+
+    int buffer[11];
+    int aux[10];
+
+    fflush(stdin);
+    fgets(buffer,11,stdin);
+    strcpy(aux,buffer);
+    if(isalnum(aux)==0)
+    {
+        if(isalpha(aux)!=0)
+        {//es numero
+            Numero=atoi(aux);
+        }
+    }
+
+
+
+    system("pause");
+
+
+    do
+    {
+        printf("%s (Cualquier caracter no Numerico Para Cancelar)",sms);
+        scanf("%d",&Numero);
+
     }while(Numero <= 0);
     return Numero;
 }

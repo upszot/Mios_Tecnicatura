@@ -82,6 +82,8 @@ int main()
             case 0://salir
                 seguir = 'n';
                 break;
+            default:
+                break;
         }//FIN switch(opcion)
 
 
